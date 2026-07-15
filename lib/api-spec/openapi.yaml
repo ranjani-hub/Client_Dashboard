@@ -3,20 +3,38 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Hexpertify Client Dashboard API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: dashboard
+    description: Dashboard data
+  - name: client
+    description: Client profile
+  - name: therapist
+    description: Therapist data
+  - name: sessions
+    description: Therapy sessions
+  - name: activities
+    description: Wellness activities
+  - name: assessments
+    description: Mental health assessments
+  - name: progress
+    description: Progress and analytics
+  - name: resources
+    description: Shared resources
+  - name: messages
+    description: Messages and notifications
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +42,287 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get dashboard summary data
+      responses:
+        "200":
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /client/me:
+    get:
+      operationId: getClientProfile
+      tags: [client]
+      summary: Get current client profile
+      responses:
+        "200":
+          description: Client profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientProfile"
+    patch:
+      operationId: updateClientProfile
+      tags: [client]
+      summary: Update client profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientProfileUpdate"
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientProfile"
+
+  /therapist:
+    get:
+      operationId: getTherapist
+      tags: [therapist]
+      summary: Get assigned therapist
+      responses:
+        "200":
+          description: Therapist profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Therapist"
+
+  /sessions:
+    get:
+      operationId: getSessions
+      tags: [sessions]
+      summary: Get all sessions
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [upcoming, past, cancelled]
+      responses:
+        "200":
+          description: List of sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Session"
+
+  /sessions/{id}/cancel:
+    patch:
+      operationId: cancelSession
+      tags: [sessions]
+      summary: Cancel a session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Cancelled session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Session"
+
+  /activities:
+    get:
+      operationId: getActivities
+      tags: [activities]
+      summary: Get all activities
+      responses:
+        "200":
+          description: List of activities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Activity"
+
+  /activities/{id}/complete:
+    patch:
+      operationId: completeActivity
+      tags: [activities]
+      summary: Mark activity as complete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivityReflection"
+      responses:
+        "200":
+          description: Completed activity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activity"
+
+  /assessments:
+    get:
+      operationId: getAssessments
+      tags: [assessments]
+      summary: Get all assessments
+      responses:
+        "200":
+          description: List of assessments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Assessment"
+
+  /assessments/{id}/submit:
+    post:
+      operationId: submitAssessment
+      tags: [assessments]
+      summary: Submit assessment answers
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssessmentSubmission"
+      responses:
+        "200":
+          description: Submitted assessment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Assessment"
+
+  /progress:
+    get:
+      operationId: getProgress
+      tags: [progress]
+      summary: Get progress and analytics
+      responses:
+        "200":
+          description: Progress data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProgressData"
+
+  /resources:
+    get:
+      operationId: getResources
+      tags: [resources]
+      summary: Get shared resources
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [article, video, worksheet, meditation, pdf]
+      responses:
+        "200":
+          description: List of resources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Resource"
+
+  /resources/{id}/save:
+    patch:
+      operationId: toggleSaveResource
+      tags: [resources]
+      summary: Toggle save a resource
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Updated resource
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Resource"
+
+  /messages:
+    get:
+      operationId: getMessages
+      tags: [messages]
+      summary: Get all messages and notifications
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+    post:
+      operationId: sendMessage
+      tags: [messages]
+      summary: Send a message to therapist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MessageInput"
+      responses:
+        "201":
+          description: Sent message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+
+  /messages/{id}/read:
+    patch:
+      operationId: markMessageRead
+      tags: [messages]
+      summary: Mark message as read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Updated message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +333,305 @@ components:
       required:
         - status
 
+    ClientProfile:
+      type: object
+      required: [id, name, email, avatarUrl]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: ["string", "null"]
+        age:
+          type: ["integer", "null"]
+        gender:
+          type: ["string", "null"]
+        preferredLanguage:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        timezone:
+          type: ["string", "null"]
+
+    ClientProfileUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: string
+        age:
+          type: integer
+        gender:
+          type: string
+        preferredLanguage:
+          type: string
+
+    Therapist:
+      type: object
+      required: [id, name, title, avatarUrl, isVerified]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        title:
+          type: string
+        avatarUrl:
+          type: ["string", "null"]
+        yearsOfExperience:
+          type: integer
+        specializations:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        bio:
+          type: ["string", "null"]
+        isVerified:
+          type: boolean
+        rating:
+          type: ["number", "null"]
+
+    Session:
+      type: object
+      required: [id, status, scheduledAt, durationMinutes, therapistName, therapistAvatarUrl]
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          enum: [upcoming, past, cancelled]
+        scheduledAt:
+          type: string
+          format: date-time
+        durationMinutes:
+          type: integer
+        therapistName:
+          type: string
+        therapistAvatarUrl:
+          type: ["string", "null"]
+        joinUrl:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+
+    Activity:
+      type: object
+      required: [id, title, category, dueDate, estimatedMinutes, completionPercent, difficulty, status]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+          enum: [breathing, journaling, mindfulness, sleep, gratitude, cbt, reading]
+        description:
+          type: ["string", "null"]
+        dueDate:
+          type: string
+          format: date
+        estimatedMinutes:
+          type: integer
+        completionPercent:
+          type: integer
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+        status:
+          type: string
+          enum: [pending, in_progress, completed]
+        reflection:
+          type: ["string", "null"]
+        completedAt:
+          type: ["string", "null"]
+
+    ActivityReflection:
+      type: object
+      properties:
+        reflection:
+          type: string
+
+    Assessment:
+      type: object
+      required: [id, name, type, status, estimatedMinutes]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum: [PHQ-9, GAD-7, PANAS, PCL-5, AUDIT]
+        description:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [pending, completed]
+        dueDate:
+          type: ["string", "null"]
+        completedAt:
+          type: ["string", "null"]
+        estimatedMinutes:
+          type: integer
+        score:
+          type: ["integer", "null"]
+        scoreHistory:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScoreHistoryPoint"
+
+    ScoreHistoryPoint:
+      type: object
+      required: [date, score]
+      properties:
+        date:
+          type: string
+        score:
+          type: integer
+
+    AssessmentSubmission:
+      type: object
+      required: [score]
+      properties:
+        score:
+          type: integer
+
+    ProgressData:
+      type: object
+      required: [activitiesCompleted, currentStreak, goalsAchieved, attendanceRate, wellnessScore, moodTrend, activityCompletion, assessmentTrends]
+      properties:
+        activitiesCompleted:
+          type: integer
+        currentStreak:
+          type: integer
+        goalsAchieved:
+          type: integer
+        attendanceRate:
+          type: number
+        wellnessScore:
+          type: number
+        moodTrend:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrendPoint"
+        activityCompletion:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrendPoint"
+        assessmentTrends:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrendPoint"
+        goalProgress:
+          type: array
+          items:
+            $ref: "#/components/schemas/GoalProgress"
+
+    TrendPoint:
+      type: object
+      required: [label, value]
+      properties:
+        label:
+          type: string
+        value:
+          type: number
+
+    GoalProgress:
+      type: object
+      required: [name, current, target]
+      properties:
+        name:
+          type: string
+        current:
+          type: number
+        target:
+          type: number
+
+    Resource:
+      type: object
+      required: [id, title, category, isSaved]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+          enum: [article, video, worksheet, meditation, pdf]
+        description:
+          type: ["string", "null"]
+        thumbnailUrl:
+          type: ["string", "null"]
+        readingMinutes:
+          type: ["integer", "null"]
+        author:
+          type: ["string", "null"]
+        isSaved:
+          type: boolean
+        isSharedByTherapist:
+          type: boolean
+        downloadUrl:
+          type: ["string", "null"]
+
+    Message:
+      type: object
+      required: [id, type, senderId, senderName, content, sentAt, isRead]
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [therapist, reminder, appointment, notification]
+        senderId:
+          type: ["integer", "null"]
+        senderName:
+          type: string
+        senderAvatarUrl:
+          type: ["string", "null"]
+        content:
+          type: string
+        sentAt:
+          type: string
+          format: date-time
+        isRead:
+          type: boolean
+
+    MessageInput:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+
+    DashboardSummary:
+      type: object
+      required: [clientName, activitiesCompleted, currentStreak, goalsAchieved, upcomingSession, todayTasks, recentMessage, sharedResources]
+      properties:
+        clientName:
+          type: string
+        activitiesCompleted:
+          type: integer
+        currentStreak:
+          type: integer
+        goalsAchieved:
+          type: integer
+        upcomingSession:
+          $ref: "#/components/schemas/Session"
+        todayTasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Activity"
+        recentMessage:
+          $ref: "#/components/schemas/Message"
+        sharedResources:
+          type: array
+          items:
+            $ref: "#/components/schemas/Resource"

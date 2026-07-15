@@ -1,0 +1,622 @@
+Design a world-class premium SaaS Client Dashboard for Hexpertify, an outcome-based online therapy platform.
+
+This dashboard is for clients attending therapy, not therapists.
+
+The interface should feel like a personal mental wellness companion rather than a hospital portal or generic admin dashboard.
+
+The design should be emotionally calming, trustworthy, modern, and premium.
+
+Overall Design Philosophy
+
+The UI should feel:
+
+Calm
+Warm
+Premium
+Modern
+Minimal
+Friendly
+Highly intuitive
+Professional
+Luxury SaaS quality
+
+Think of the quality level of products like:
+
+Apple
+Notion
+Linear
+Stripe
+Headspace
+Calm
+Quenza
+Vercel
+
+Avoid:
+
+Generic Bootstrap dashboards
+Material UI templates
+Hospital-looking interfaces
+Crowded layouts
+Too many borders
+Bright, aggressive colors
+
+The user should feel relaxed the moment they log in.
+
+Layout
+
+Desktop-first responsive dashboard.
+
+Three main sections.
+
+Left Sidebar
+
+Fixed sidebar.
+
+Width around 250px.
+
+White background.
+
+Large rounded navigation items.
+
+Minimal outline icons.
+
+Lots of whitespace.
+
+Grouped navigation.
+
+User profile fixed at the bottom.
+
+Sidebar Items
+
+Home
+My Therapist
+Sessions
+Activities
+Assessments
+Progress
+Resources
+Messages
+Profile
+Logout
+
+Active navigation should have a soft purple pill background.
+
+Top Navigation
+
+Height around 70px.
+
+White background.
+
+Contains:
+
+Search bar
+Notification icon
+User avatar
+
+Keep it extremely minimal.
+
+Main Content
+
+Background
+
+Very light grey
+
+Example
+
+#F6F7FB
+
+Large page padding.
+
+24–32px spacing.
+
+Large rounded cards.
+
+Very soft shadows.
+
+Lots of whitespace.
+
+Color Palette
+
+Primary
+
+Purple
+
+Soft Lavender
+
+White
+
+Light Grey
+
+Background
+
+#F6F7FB
+
+Cards
+
+White
+
+Primary Button
+
+Purple
+
+Success
+
+Soft Green
+
+Warning
+
+Soft Orange
+
+Error
+
+Soft Red
+
+Never use harsh colors.
+
+Everything should feel calm.
+
+Typography
+
+Use
+
+Inter
+
+or
+
+Plus Jakarta Sans
+
+Large headings.
+
+Medium labels.
+
+Small helper text.
+
+Excellent hierarchy.
+
+Home Dashboard
+
+The first screen should immediately answer
+
+"What should I do today?"
+
+Create a large hero section.
+
+Rounded 28px.
+
+Soft purple gradient.
+
+Hero Section
+
+Display
+
+Welcome back, [Client Name]
+
+A motivational message.
+
+Example
+
+Small consistent steps lead to meaningful progress.
+
+Show
+
+Current therapist
+
+Next therapy session
+
+Days until next appointment
+
+Primary CTA
+
+Join Session
+
+or
+
+Schedule Session
+
+Today's Tasks
+
+This should be the most important section.
+
+Display beautiful task cards.
+
+Examples
+
+Complete Breathing Exercise
+
+Finish CBT Worksheet
+
+Complete PHQ-9 Assessment
+
+Read Therapist Resource
+
+Practice Mindfulness
+
+Each task should display
+
+Due date
+Progress
+Estimated time
+Start button
+
+Cards should feel interactive.
+
+Progress Snapshot
+
+Create four premium cards.
+
+Examples
+
+Activities Completed
+
+Current Streak
+
+Goals Achieved
+
+Upcoming Session
+
+Rounded cards.
+
+Small icons.
+
+Large numbers.
+
+Tiny progress badges.
+
+Recent Message
+
+Beautiful message card.
+
+Display the latest message sent by the therapist.
+
+Show
+
+Therapist photo
+
+Message preview
+
+Date
+
+Read Message button
+
+Shared Resources
+
+Horizontal card layout.
+
+Display
+
+Worksheets
+
+Articles
+
+Videos
+
+PDFs
+
+Beautiful thumbnails.
+
+Rounded cards.
+
+My Therapist
+
+Design a clean therapist profile card.
+
+Display
+
+Profile photo
+Full name
+Professional title
+Years of experience
+Specializations
+Languages
+Short bio
+Verification badge
+
+Buttons
+
+View Full Profile
+
+This should open inside a slide-over panel or modal.
+
+Never navigate away.
+
+Second button
+
+Change Therapist
+
+Allow
+
+AI Recommendations
+
+or
+
+Browse Therapists
+
+Sessions
+
+Modern appointment management.
+
+Cards for
+
+Upcoming Sessions
+
+Past Sessions
+
+Cancelled Sessions
+
+Each session card
+
+Date
+
+Time
+
+Duration
+
+Therapist
+
+Join button
+
+Reschedule
+
+Cancel
+
+Never display therapist notes.
+
+Activities
+
+Beautiful activity cards.
+
+Examples
+
+Breathing Exercise
+
+Journaling
+
+Mindfulness
+
+Sleep Diary
+
+Gratitude Practice
+
+Each card should display
+
+Difficulty
+
+Estimated Time
+
+Due Date
+
+Completion %
+
+Progress bar
+
+Start button
+
+After completion
+
+Reflection box
+
+Submit button
+
+Assessments
+
+Premium assessment cards.
+
+Examples
+
+PHQ-9
+
+GAD-7
+
+PANAS
+
+Display
+
+Pending
+
+Completed
+
+Due date
+
+Estimated time
+
+Start Assessment
+
+Completed assessments should show
+
+Completion date
+
+Trend graph
+
+Supportive progress visualization
+
+Never make it feel diagnostic.
+
+Progress
+
+This page should celebrate progress.
+
+Display
+
+Goal Progress
+
+Mood Trends
+
+Activity Completion
+
+Attendance
+
+Assessment Trends
+
+Wellness Streak
+
+Beautiful charts.
+
+Rounded analytics cards.
+
+Soft gradients.
+
+Positive visual language.
+
+Resources
+
+Display
+
+Articles
+
+Videos
+
+Worksheets
+
+Meditations
+
+PDFs
+
+Therapist Shared Resources
+
+Beautiful resource cards.
+
+Thumbnail.
+
+Category.
+
+Reading time.
+
+Download button.
+
+Save button.
+
+Messages
+
+Modern messaging interface.
+
+Display
+
+Therapist messages
+
+Homework reminders
+
+Appointment reminders
+
+Platform notifications
+
+Clean chat bubbles.
+
+Rounded.
+
+Minimal.
+
+No personal phone numbers or emails visible.
+
+Profile
+
+Simple profile page.
+
+Display
+
+Profile Photo
+Full Name
+Age
+Gender
+Email
+Phone Number
+Preferred Language
+
+Editable where permitted.
+
+Logout
+
+Simple confirmation dialog.
+
+"Are you sure you want to log out?"
+
+Buttons
+
+Cancel
+
+Logout
+
+Card Design
+
+Every card should have
+
+20–24px border radius
+
+Soft shadow
+
+Large padding
+
+Hover animation
+
+Beautiful spacing
+
+Floating appearance
+
+Buttons
+
+Rounded pill buttons.
+
+Purple primary.
+
+White secondary.
+
+Height around 44–48px.
+
+Smooth hover animation.
+
+Charts
+
+Modern rounded charts.
+
+Soft colors.
+
+No heavy grid lines.
+
+Beautiful tooltips.
+
+Minimal legends.
+
+Icons
+
+Use Lucide outline icons.
+
+Minimal.
+
+Professional.
+
+Spacing
+
+32px between major sections.
+
+24px card padding.
+
+16px internal spacing.
+
+Nothing should feel crowded.
+
+Shadows
+
+Very soft.
+
+Elegant.
+
+Subtle.
+
+Premium depth.
+
+Animations
+
+Card hover.
+
+Button hover.
+
+Smooth page transitions.
+
+Micro-interactions.
+
+Soft loading skeletons.
+
+Final Design Goal
+
+This should not look like an admin dashboard.
+
+It should feel like a premium mental wellness platform that clients enjoy opening every day. The design should communicate trust, warmth, simplicity, and professionalism while maintaining the visual quality of a top-tier 2026 SaaS product. Every screen should encourage engagement and make therapy feel approachable, organized, and supportive.
