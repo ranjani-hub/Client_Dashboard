@@ -82,44 +82,44 @@
   --elevate-2: rgba(0, 0, 0, 0.08);
 
   /* ── App background & text ──────────────────────────────── */
-  --background: 220 20% 97%;        /* #F5F6FA — clean neutral */
-  --foreground: 240 28% 13%;        /* #181730 — near-black */
-  --border: 220 13% 90%;            /* subtle gray border */
+  --background: 248 33% 98%;        /* hsl(248,33%,98%) off-white cool purple tint */
+  --foreground: 260 20% 15%;        /* hsl(260,20%,15%) near-black purple undertone */
+  --border: 240 10% 90%;            /* hsl(240,10%,90%) light grey */
 
   /* ── Cards ──────────────────────────────────────────────── */
-  --card: 0 0% 100%;                /* pure white */
-  --card-foreground: 240 28% 13%;
-  --card-border: 220 13% 90%;
+  --card: 240 10% 96%;              /* hsl(240,10%,96%) very light grey */
+  --card-foreground: 260 20% 15%;
+  --card-border: 240 10% 90%;
 
   /* ── Sidebar — light, matches body ──────────────────────── */
-  --sidebar: 0 0% 100%;             /* pure white */
-  --sidebar-foreground: 240 28% 13%;
-  --sidebar-border: 220 13% 90%;
-  --sidebar-primary: 248 82% 57%;   /* indigo — active item bg */
+  --sidebar: 248 33% 98%;           /* same as background */
+  --sidebar-foreground: 260 20% 15%;
+  --sidebar-border: 240 10% 90%;
+  --sidebar-primary: 261 68% 49%;   /* #532bce deep violet-purple */
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 248 100% 96%;   /* very light indigo tint */
-  --sidebar-accent-foreground: 248 82% 57%;
-  --sidebar-ring: 248 82% 57%;
+  --sidebar-accent: 261 68% 95%;    /* very light violet tint */
+  --sidebar-accent-foreground: 261 68% 49%;
+  --sidebar-ring: 261 68% 49%;
 
   /* ── Popover ─────────────────────────────────────────────── */
   --popover: 0 0% 100%;
-  --popover-foreground: 240 28% 13%;
-  --popover-border: 220 13% 90%;
+  --popover-foreground: 260 20% 15%;
+  --popover-border: 240 10% 90%;
 
-  /* ── Primary — deep indigo-purple ──────────────────────── */
-  --primary: 248 82% 57%;           /* #4D43E5 deep indigo */
+  /* ── Primary — deep violet-purple ──────────────────────── */
+  --primary: 261 68% 49%;           /* hsl(261,68%,49%) #532bce */
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 0 0% 100%;
-  --secondary-foreground: 248 82% 57%;
+  --secondary: 240 10% 96%;         /* hsl(240,10%,96%) very light grey */
+  --secondary-foreground: 261 68% 49%;
 
   /* ── Muted ───────────────────────────────────────────────── */
-  --muted: 220 14% 94%;
-  --muted-foreground: 220 9% 48%;   /* #6B7280 */
+  --muted: 240 10% 96%;             /* hsl(240,10%,96%) */
+  --muted-foreground: 260 10% 45%;  /* hsl(260,10%,45%) medium grey */
 
-  /* ── Accent (light purple tint on white bg) ─────────────── */
-  --accent: 248 100% 96%;           /* #EEEEFF */
-  --accent-foreground: 248 82% 57%;
+  /* ── Accent (light violet tint) ─────────────────────────── */
+  --accent: 261 68% 95%;            /* very light violet */
+  --accent-foreground: 261 68% 49%;
 
   /* ── Semantic ────────────────────────────────────────────── */
   --destructive: 0 84% 60%;
