@@ -52,15 +52,15 @@ export function Sidebar() {
 
   return (
     <>
-      <aside className="fixed left-0 top-0 bottom-0 w-[240px] bg-sidebar hidden md:flex flex-col z-40">
+      <aside className="fixed left-0 top-0 bottom-0 w-[240px] bg-sidebar border-r border-sidebar-border hidden md:flex flex-col z-40">
         {/* Logo */}
         <div className="px-6 py-6 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-sidebar-primary flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
             <span className="text-white font-bold text-sm">H</span>
           </div>
           <div className="leading-tight">
-            <p className="text-white font-bold text-[15px] tracking-tight">Hexpertify</p>
-            <p className="text-sidebar-foreground/40 text-[10px] font-medium tracking-widest uppercase">Client Suite</p>
+            <p className="text-foreground font-bold text-[15px] tracking-tight">Hexpertify</p>
+            <p className="text-muted-foreground text-[10px] font-medium tracking-widest uppercase">Client Suite</p>
           </div>
         </div>
 
@@ -68,7 +68,7 @@ export function Sidebar() {
         <nav className="flex-1 px-3 space-y-5 overflow-y-auto pb-4">
           {NAV_SECTIONS.map((section) => (
             <div key={section.label}>
-              <p className="px-3 mb-1.5 text-[10px] font-semibold tracking-widest text-sidebar-foreground/35 uppercase select-none">
+              <p className="px-3 mb-1.5 text-[10px] font-semibold tracking-widest text-muted-foreground/60 uppercase select-none">
                 {section.label}
               </p>
               <div className="space-y-0.5">
@@ -81,8 +81,8 @@ export function Sidebar() {
                       <div
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 cursor-pointer text-sm font-medium
                           ${isActive
-                            ? 'bg-sidebar-primary text-white'
-                            : 'text-sidebar-foreground/65 hover:bg-sidebar-accent hover:text-white'
+                            ? 'bg-sidebar-accent text-sidebar-primary'
+                            : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                           }`}
                       >
                         <Icon className="w-4 h-4 shrink-0" strokeWidth={isActive ? 2.5 : 2} />
@@ -100,7 +100,7 @@ export function Sidebar() {
         <div className="px-3 pb-4 space-y-1 border-t border-sidebar-border pt-4">
           <button
             onClick={() => setShowLogout(true)}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 text-sidebar-foreground/50 hover:bg-red-500/15 hover:text-red-300 text-sm font-medium cursor-pointer"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 text-muted-foreground hover:bg-red-50 hover:text-destructive text-sm font-medium cursor-pointer"
           >
             <LogOut className="w-4 h-4 shrink-0" strokeWidth={2} />
             <span>Sign out</span>
@@ -108,17 +108,17 @@ export function Sidebar() {
 
           {profile && (
             <Link href="/profile" className="block">
-              <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-sidebar-accent transition-colors cursor-pointer">
+              <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors cursor-pointer">
                 {profile.avatarUrl ? (
                   <img src={profile.avatarUrl} alt={profile.name} className="w-8 h-8 rounded-full object-cover shrink-0" />
                 ) : (
-                  <div className="w-8 h-8 rounded-full bg-sidebar-primary/60 text-white flex items-center justify-center font-bold text-sm shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm shrink-0">
                     {profile.name.charAt(0)}
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-white truncate leading-tight">{profile.name}</p>
-                  <p className="text-xs text-sidebar-foreground/40 truncate leading-tight mt-0.5">{profile.email}</p>
+                  <p className="text-sm font-semibold text-foreground truncate leading-tight">{profile.name}</p>
+                  <p className="text-xs text-muted-foreground truncate leading-tight mt-0.5">{profile.email}</p>
                 </div>
               </div>
             </Link>

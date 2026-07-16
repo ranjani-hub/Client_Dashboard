@@ -91,15 +91,15 @@
   --card-foreground: 240 28% 13%;
   --card-border: 220 13% 90%;
 
-  /* ── Sidebar — dark navy-purple ─────────────────────────── */
-  --sidebar: 258 55% 12%;           /* #130D30 deep navy-purple */
-  --sidebar-foreground: 245 30% 88%; /* #DDD8F5 soft lavender-white */
-  --sidebar-border: 258 40% 18%;    /* slightly lighter than bg */
-  --sidebar-primary: 248 82% 60%;   /* #5248E8 vivid indigo */
+  /* ── Sidebar — light, matches body ──────────────────────── */
+  --sidebar: 0 0% 100%;             /* pure white */
+  --sidebar-foreground: 240 28% 13%;
+  --sidebar-border: 220 13% 90%;
+  --sidebar-primary: 248 82% 57%;   /* indigo — active item bg */
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 258 50% 20%;    /* subtle hover on dark bg */
-  --sidebar-accent-foreground: 0 0% 100%;
-  --sidebar-ring: 248 82% 60%;
+  --sidebar-accent: 248 100% 96%;   /* very light indigo tint */
+  --sidebar-accent-foreground: 248 82% 57%;
+  --sidebar-ring: 248 82% 57%;
 
   /* ── Popover ─────────────────────────────────────────────── */
   --popover: 0 0% 100%;
