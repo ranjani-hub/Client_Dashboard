@@ -1,20 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useGetDashboard } from '@workspace/api-client-react';
-import { pageTransition, staggerContainer, staggerItem } from '@/components/shared';
-import { Activity as ActivityIcon, CheckCircle2, Flame, Target, Calendar, MessageSquare, PlayCircle, ExternalLink, ArrowRight, BookOpen } from 'lucide-react';
+import { pageTransition } from '@/components/shared';
+import {
+  Video, Users, FileText, Clock, Calendar, CheckCircle2,
+  PlayCircle, Activity as ActivityIcon, BookOpen, ExternalLink,
+  AlertCircle,
+} from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
 import { Link } from 'wouter';
 
+function getWeekNumber(d: Date) {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  return Math.ceil(((date.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+}
+
+function initials(name: string) {
+  return name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+}
+
 export default function Dashboard() {
   const { data, isLoading } = useGetDashboard();
+  const [scheduleTab, setScheduleTab] = useState<'today' | 'week' | 'month'>('today');
+
+  const today = new Date();
+  const dayLabel = format(today, 'EEEE, MMMM d');
+  const weekNum = getWeekNumber(today);
 
   if (isLoading) {
     return (
-      <div className="space-y-6 animate-pulse">
-        <div className="h-48 bg-muted rounded-[24px]"></div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[1,2,3,4].map(i => <div key={i} className="h-32 bg-muted rounded-[20px]"></div>)}
+      <div className="space-y-5 animate-pulse">
+        <div className="h-56 bg-muted rounded-2xl" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map(i => <div key={i} className="h-36 bg-muted rounded-xl" />)}
+        </div>
+        <div className="grid grid-cols-3 gap-5">
+          <div className="col-span-2 h-64 bg-muted rounded-xl" />
+          <div className="h-64 bg-muted rounded-xl" />
         </div>
       </div>
     );
@@ -23,56 +48,154 @@ export default function Dashboard() {
   if (!data) return null;
 
   const {
-    clientName,
-    activitiesCompleted,
-    currentStreak,
-    goalsAchieved,
-    upcomingSession,
-    todayTasks,
-    recentMessage,
-    sharedResources
+    clientName, activitiesCompleted, currentStreak,
+    goalsAchieved, upcomingSession, todayTasks, recentMessage, sharedResources,
   } = data;
 
+  const stats = [
+    {
+      icon: CheckCircle2,
+      label: 'Activities Done',
+      value: activitiesCompleted,
+      sub: 'Completed total',
+      delta: '+2',
+      plus: true,
+      iconColor: 'text-blue-500',
+    },
+    {
+      icon: Users,
+      label: 'Day Streak',
+      value: `${currentStreak}d`,
+      sub: 'Keep it going!',
+      delta: '+3',
+      plus: true,
+      iconColor: 'text-violet-500',
+    },
+    {
+      icon: FileText,
+      label: 'Goals Achieved',
+      value: goalsAchieved,
+      sub: 'Of your targets',
+      delta: '-1',
+      plus: false,
+      iconColor: 'text-orange-500',
+    },
+    {
+      icon: Clock,
+      label: 'Upcoming',
+      value: upcomingSession ? 1 : 0,
+      sub: 'Session scheduled',
+      delta: '+1',
+      plus: true,
+      iconColor: 'text-teal-500',
+    },
+  ];
+
   return (
-    <motion.div {...pageTransition} className="max-w-6xl mx-auto space-y-8 pb-12">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-primary/90 to-primary text-white p-8 md:p-10 shadow-xl">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-foreground/10 rounded-full blur-2xl translate-y-1/3 -translate-x-1/4"></div>
-        
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-4 max-w-xl">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Good morning, {clientName}</h1>
-            <p className="text-primary-foreground/90 text-lg leading-relaxed">
-              "The beautiful thing about learning is that no one can take it away from you."
-            </p>
+    <motion.div {...pageTransition} className="space-y-5 pb-12">
+
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section
+        className="relative overflow-hidden rounded-2xl text-white"
+        style={{ background: 'linear-gradient(130deg, hsl(261,70%,34%) 0%, hsl(261,68%,47%) 55%, hsl(265,65%,52%) 100%)' }}
+      >
+        {/* ambient glows */}
+        <div className="absolute top-0 right-1/3 w-80 h-80 bg-white/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-10 left-0 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none" />
+
+        <div className="relative z-10 p-7 flex flex-col md:flex-row gap-6 items-stretch">
+
+          {/* Left */}
+          <div className="flex-1 flex flex-col gap-4 min-w-0">
+            {/* Date chip */}
+            <span className="self-start inline-flex items-center px-3 py-1 rounded-full border border-white/20 bg-white/10 text-white/85 text-xs font-medium">
+              {dayLabel} · Week {weekNum}
+            </span>
+
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight mb-1.5">
+                Welcome back, {clientName}
+              </h1>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Your wellness journey continues &middot; {activitiesCompleted} activities completed and {goalsAchieved} goals achieved so far.
+              </p>
+            </div>
+
+            {/* Bottom info pills */}
+            <div className="flex items-center gap-2 flex-wrap mt-auto">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/20 border border-white/10 text-white/85 text-xs font-medium">
+                <Calendar className="w-3.5 h-3.5" />
+                {currentStreak} day streak
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/20 border border-white/10 text-white/85 text-xs font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                Active plan
+              </span>
+            </div>
           </div>
-          
+
+          {/* Next Session card — glassmorphism dark */}
           {upcomingSession && (
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 min-w-[280px]">
-              <p className="text-sm text-primary-foreground/80 font-medium uppercase tracking-wider mb-2">Next Session</p>
-              <div className="flex items-center gap-3 mb-4">
+            <div className="w-full md:w-[300px] shrink-0 rounded-xl border border-white/10 bg-black/25 backdrop-blur-sm p-4 flex flex-col gap-3">
+              {/* Header */}
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-semibold tracking-widest text-white/55 uppercase">
+                  Next Session
+                </span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/25 text-emerald-300 text-[11px] font-medium">
+                  <Clock className="w-3 h-3" />
+                  {format(new Date(upcomingSession.scheduledAt), 'MMM d')}
+                </span>
+              </div>
+
+              {/* Therapist */}
+              <div className="flex items-center gap-3">
                 {upcomingSession.therapistAvatarUrl ? (
-                  <img src={upcomingSession.therapistAvatarUrl} alt={upcomingSession.therapistName} className="w-12 h-12 rounded-full border-2 border-white/30" />
+                  <img
+                    src={upcomingSession.therapistAvatarUrl}
+                    alt={upcomingSession.therapistName}
+                    className="w-10 h-10 rounded-full border border-white/20 shrink-0"
+                  />
                 ) : (
-                  <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center font-bold">
-                    {upcomingSession.therapistName.charAt(0)}
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm shrink-0">
+                    {initials(upcomingSession.therapistName)}
                   </div>
                 )}
-                <div>
-                  <p className="font-semibold">{upcomingSession.therapistName}</p>
-                  <p className="text-sm text-primary-foreground/90">
-                    {format(new Date(upcomingSession.scheduledAt), 'MMM d, h:mm a')}
+                <div className="min-w-0">
+                  <p className="font-semibold text-sm text-white leading-tight">
+                    {upcomingSession.therapistName}
+                  </p>
+                  <p className="text-xs text-white/55">
+                    CBT · Session · {upcomingSession.durationMinutes} min
                   </p>
                 </div>
               </div>
+
+              {/* Time row */}
+              <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/8 border border-white/8">
+                <span className="text-sm font-bold text-white">
+                  {format(new Date(upcomingSession.scheduledAt), 'h:mm a')}
+                </span>
+                <span className="text-xs text-white/45">
+                  {format(new Date(upcomingSession.scheduledAt), 'MMMM d')}
+                </span>
+              </div>
+
+              {/* Join button */}
               {upcomingSession.joinUrl ? (
-                <a href={upcomingSession.joinUrl} target="_blank" rel="noreferrer" className="w-full h-10 rounded-full bg-white text-primary font-semibold flex items-center justify-center hover:bg-white/90 transition-colors">
-                  Join Session
+                <a
+                  href={upcomingSession.joinUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full h-9 rounded-lg bg-white text-primary font-semibold text-sm flex items-center justify-center gap-2 hover:bg-white/90 transition-colors"
+                >
+                  <Video className="w-4 h-4" />
+                  Join session
                 </a>
               ) : (
-                <div className="w-full h-10 rounded-full bg-white/20 text-white font-medium flex items-center justify-center">
-                  Link available soon
+                <div className="w-full h-9 rounded-lg bg-white text-primary font-semibold text-sm flex items-center justify-center gap-2 opacity-80">
+                  <Video className="w-4 h-4" />
+                  Join session
                 </div>
               )}
             </div>
@@ -80,137 +203,170 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* Progress Snapshots */}
-      <motion.div variants={staggerContainer} initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Activities Done', value: activitiesCompleted, icon: CheckCircle2, color: 'text-success', bg: 'bg-success-bg' },
-          { label: 'Day Streak', value: currentStreak, icon: Flame, color: 'text-warning', bg: 'bg-warning-bg' },
-          { label: 'Goals Achieved', value: goalsAchieved, icon: Target, color: 'text-primary', bg: 'bg-accent' },
-          { label: 'Upcoming', value: upcomingSession ? 1 : 0, icon: Calendar, color: 'text-blue-500', bg: 'bg-blue-50' }
-        ].map((stat, i) => (
-          <motion.div key={i} variants={staggerItem} className="hex-card flex items-center gap-4">
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center ${stat.bg} ${stat.color}`}>
-              <stat.icon className="w-6 h-6" />
+      {/* ── Stat cards ───────────────────────────────────────── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((stat, i) => (
+          <div key={i} className="hex-card flex flex-col">
+            {/* Icon row + delta badge */}
+            <div className="flex items-start justify-between mb-4">
+              <stat.icon className={`w-5 h-5 ${stat.iconColor}`} strokeWidth={1.75} />
+              <span
+                className={`text-[11px] font-semibold px-1.5 py-0.5 rounded-full ${
+                  stat.plus
+                    ? 'bg-emerald-50 text-emerald-600'
+                    : 'bg-red-50 text-red-500'
+                }`}
+              >
+                {stat.delta}
+              </span>
             </div>
-            <div>
-              <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-              <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-            </div>
-          </motion.div>
+            <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
+            <p className="text-[2rem] font-bold text-foreground leading-none mb-1">{stat.value}</p>
+            <p className="text-xs text-muted-foreground">{stat.sub}</p>
+          </div>
         ))}
-      </motion.div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-        {/* Today's Tasks */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">Today's Focus</h2>
-            <Link href="/activities" className="text-primary font-medium flex items-center gap-1 hover:underline">
-              View all <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-          
-          <div className="space-y-3">
-            {todayTasks.length > 0 ? (
-              todayTasks.map((task) => (
-                <div key={task.id} className="hex-card !p-5 flex items-center justify-between group cursor-pointer">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-primary">
-                      <ActivityIcon className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">{task.title}</h3>
-                      <p className="text-sm text-muted-foreground">{task.estimatedMinutes} mins • {task.difficulty}</p>
-                    </div>
-                  </div>
-                  <Link href="/activities" className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground group-hover:bg-primary group-hover:text-white transition-colors">
-                    <PlayCircle className="w-5 h-5" />
-                  </Link>
-                </div>
-              ))
-            ) : (
-              <div className="hex-card !py-12 flex flex-col items-center justify-center text-center">
-                <div className="w-16 h-16 rounded-full bg-success-bg text-success flex items-center justify-center mb-4">
-                  <CheckCircle2 className="w-8 h-8" />
-                </div>
-                <h3 className="font-bold text-lg mb-1">All caught up!</h3>
-                <p className="text-muted-foreground">You've completed all tasks for today. Enjoy your rest.</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Recent Message & Quick Actions */}
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold">Messages</h2>
-              <Link href="/messages" className="text-primary font-medium hover:underline text-sm">Open</Link>
-            </div>
-            
-            {recentMessage ? (
-              <Link href="/messages" className="block">
-                <div className="hex-card !p-5 cursor-pointer hover:border-primary/20 border border-transparent">
-                  <div className="flex items-center gap-3 mb-3">
-                    {recentMessage.senderAvatarUrl ? (
-                      <img src={recentMessage.senderAvatarUrl} className="w-10 h-10 rounded-full" alt="" />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-accent text-primary flex items-center justify-center font-bold">
-                        {recentMessage.senderName.charAt(0)}
-                      </div>
-                    )}
-                    <div>
-                      <p className="font-semibold text-sm">{recentMessage.senderName}</p>
-                      <p className="text-xs text-muted-foreground">{formatDistanceToNow(new Date(recentMessage.sentAt), { addSuffix: true })}</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-foreground line-clamp-2">{recentMessage.content}</p>
-                </div>
-              </Link>
-            ) : (
-              <div className="hex-card !p-6 text-center">
-                <p className="text-muted-foreground text-sm">No recent messages.</p>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
 
-      {/* Shared Resources */}
-      {sharedResources.length > 0 && (
-        <section className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">Recommended for You</h2>
-            <Link href="/resources" className="text-primary font-medium text-sm hover:underline">View Library</Link>
+      {/* ── Bottom split ─────────────────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+        {/* Today's schedule (2/3) */}
+        <div className="lg:col-span-2 hex-card">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-[15px] font-bold text-foreground">Today's Focus</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {todayTasks.length} tasks &middot; Stay consistent
+              </p>
+            </div>
+            {/* Tab switcher */}
+            <div className="flex items-center gap-0.5 p-1 bg-muted rounded-lg">
+              {(['Today', 'Week', 'Month'] as const).map(tab => (
+                <button
+                  key={tab}
+                  onClick={() => setScheduleTab(tab.toLowerCase() as 'today' | 'week' | 'month')}
+                  className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
+                    scheduleTab === tab.toLowerCase()
+                      ? 'bg-white text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
           </div>
-          
-          <div className="flex overflow-x-auto pb-6 -mx-2 px-2 gap-4 snap-x">
-            {sharedResources.map((resource) => (
-              <div key={resource.id} className="snap-start shrink-0 w-[280px] hex-card !p-4 flex flex-col">
-                {resource.thumbnailUrl ? (
-                  <div className="w-full h-32 rounded-xl bg-muted mb-4 overflow-hidden">
-                    <img src={resource.thumbnailUrl} alt="" className="w-full h-full object-cover" />
+
+          <div className="space-y-1">
+            {todayTasks.length > 0 ? (
+              todayTasks.slice(0, 6).map(task => (
+                <Link key={task.id} href="/activities" className="block">
+                  <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-muted transition-colors cursor-pointer group">
+                    <div className="w-8 h-8 rounded-full bg-accent text-primary flex items-center justify-center shrink-0">
+                      <ActivityIcon className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                        {task.title}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {task.estimatedMinutes} min &middot; {task.difficulty}
+                      </p>
+                    </div>
+                    <div className="w-7 h-7 rounded-full bg-muted group-hover:bg-primary text-muted-foreground group-hover:text-white flex items-center justify-center transition-colors shrink-0">
+                      <PlayCircle className="w-4 h-4" />
+                    </div>
                   </div>
-                ) : (
-                  <div className="w-full h-32 rounded-xl bg-accent text-primary flex items-center justify-center mb-4">
-                    <BookOpen className="w-10 h-10 opacity-50" />
+                </Link>
+              ))
+            ) : (
+              <div className="py-10 flex flex-col items-center justify-center text-center">
+                <CheckCircle2 className="w-10 h-10 text-emerald-500 mb-2" />
+                <p className="font-semibold text-sm">All done for today!</p>
+                <p className="text-xs text-muted-foreground mt-0.5">You've completed all tasks.</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Recent messages / pending panel (1/3) */}
+        <div className="hex-card flex flex-col">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-[15px] font-bold text-foreground">Messages</h2>
+              {recentMessage && (
+                <p className="text-xs text-muted-foreground mt-0.5">1 unread</p>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-50 border border-orange-100 text-orange-600 text-[11px] font-semibold">
+                <AlertCircle className="w-3 h-3" />
+                Unread
+              </span>
+              <Link href="/messages" className="text-xs font-semibold text-primary hover:underline">
+                Open
+              </Link>
+            </div>
+          </div>
+
+          {recentMessage ? (
+            <Link href="/messages" className="block flex-1">
+              <div className="space-y-3 cursor-pointer group">
+                <div className="flex items-center gap-3">
+                  {recentMessage.senderAvatarUrl ? (
+                    <img
+                      src={recentMessage.senderAvatarUrl}
+                      className="w-9 h-9 rounded-full shrink-0"
+                      alt=""
+                    />
+                  ) : (
+                    <div className="w-9 h-9 rounded-full bg-accent text-primary flex items-center justify-center font-bold text-sm shrink-0">
+                      {initials(recentMessage.senderName)}
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold truncate group-hover:text-primary transition-colors">
+                      {recentMessage.senderName}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatDistanceToNow(new Date(recentMessage.sentAt), { addSuffix: true })}
+                    </p>
                   </div>
-                )}
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 bg-accent text-primary rounded-md">
-                    {resource.category}
-                  </span>
-                  <span className="text-xs text-muted-foreground">{resource.readingMinutes} min</span>
                 </div>
-                <h3 className="font-semibold leading-tight mb-4 flex-1 line-clamp-2">{resource.title}</h3>
-                <Link href="/resources" className="text-sm text-primary font-medium flex items-center gap-1">
-                  Open Resource <ExternalLink className="w-3 h-3" />
+                <p className="text-sm text-muted-foreground line-clamp-4 leading-relaxed">
+                  {recentMessage.content}
+                </p>
+              </div>
+            </Link>
+          ) : (
+            <div className="flex-1 flex items-center justify-center">
+              <p className="text-sm text-muted-foreground">No recent messages</p>
+            </div>
+          )}
+
+          {/* Shared resources teaser */}
+          {sharedResources.length > 0 && (
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-xs font-semibold text-foreground">Recommended</p>
+                <Link href="/resources" className="text-[11px] text-primary font-medium hover:underline flex items-center gap-0.5">
+                  View all <ExternalLink className="w-3 h-3" />
                 </Link>
               </div>
-            ))}
-          </div>
-        </section>
-      )}
+              <div className="space-y-2">
+                {sharedResources.slice(0, 2).map(r => (
+                  <div key={r.id} className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-accent text-primary flex items-center justify-center shrink-0">
+                      <BookOpen className="w-3.5 h-3.5" />
+                    </div>
+                    <p className="text-xs text-foreground line-clamp-1 font-medium">{r.title}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </motion.div>
   );
 }
