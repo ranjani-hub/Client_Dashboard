@@ -43,7 +43,6 @@ const NAV_SECTIONS = [
     items: [
       { path: '/resources', label: 'Resources', icon: BookOpen },
       { path: '/messages', label: 'Messages', icon: MessageSquare },
-      { path: '/profile', label: 'Profile', icon: Settings },
     ],
   },
 ];
