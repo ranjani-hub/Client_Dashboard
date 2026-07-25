@@ -11,7 +11,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "dev": "pnpm --filter @workspace/client-dashboard run dev",
+    "dev": "pnpm run dev:all",
     "dev:api": "pnpm --filter @workspace/api-server run dev",
     "dev:mockup": "pnpm --filter @workspace/mockup-sandbox run dev",
     "dev:all": "pnpm --parallel --filter @workspace/client-dashboard --filter @workspace/api-server run dev",

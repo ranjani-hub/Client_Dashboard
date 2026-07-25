@@ -7,8 +7,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 
 const MOCK_PROFILE = {
-  name: 'Alex Rivera',
-  email: 'alex.rivera@example.com',
+  name: 'Alex Morgan',
+  email: 'alex.morgan@example.com',
   phone: '+1 (555) 234-5678',
   age: 29,
   gender: 'Non-binary',
@@ -35,8 +35,8 @@ export default function ProfilePage() {
   useEffect(() => {
     if (profile) {
       setFormData({
-        name: profile.name || 'Alex Rivera',
-        email: profile.email || 'alex.rivera@example.com',
+        name: profile.name || 'Alex Morgan',
+        email: profile.email || 'alex.morgan@example.com',
         phone: profile.phone || '+1 (555) 234-5678',
         age: profile.age ? String(profile.age) : '29',
         gender: profile.gender || 'Non-binary',

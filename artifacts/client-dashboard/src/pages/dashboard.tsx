@@ -27,7 +27,7 @@ export default function Dashboard() {
   const [scheduleTab, setScheduleTab] = useState<'today' | 'week' | 'month'>('today');
 
   const mockDashboardData = {
-    clientName: "Alex Rivera",
+    clientName: "Alex Morgan",
     activitiesCompleted: 14,
     currentStreak: 7,
     goalsAchieved: 5,
@@ -205,7 +205,7 @@ export default function Dashboard() {
           <div className="flex-1 flex flex-col gap-4 min-w-0">
             {/* Date chip */}
             <span className="self-start inline-flex items-center px-3 py-1 rounded-full border border-white/20 bg-white/10 text-white/85 text-xs font-medium">
-              {dayLabel} · Week {weekNum}
+              {dayLabel}
             </span>
 
             <div>
@@ -222,10 +222,6 @@ export default function Dashboard() {
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/20 border border-white/10 text-white/85 text-xs font-medium">
                 <Calendar className="w-3.5 h-3.5" />
                 {currentStreak} day streak
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/20 border border-white/10 text-white/85 text-xs font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                Active plan
               </span>
             </div>
           </div>

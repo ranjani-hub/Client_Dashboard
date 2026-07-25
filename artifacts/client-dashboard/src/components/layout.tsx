@@ -48,13 +48,43 @@ const NAV_SECTIONS = [
 ];
 
 function initials(name: string) {
-  return name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+  return name ? name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'AM';
+}
+
+function RedHairAvatar({ className = "w-9 h-9" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="40" r="40" fill="#FFF0ED" />
+      {/* Hair back */}
+      <path d="M18 45C16 30 24 12 40 12C56 12 64 30 62 45C62 55 60 62 58 66H22C20 62 18 55 18 45Z" fill="#E24D28" />
+      {/* Neck */}
+      <path d="M34 50H46V60H34V50Z" fill="#FAD1C0" />
+      {/* Shoulders / Shirt */}
+      <path d="M20 72C20 60 29 56 40 56C51 56 60 60 60 72V80H20V72Z" fill="#74C0FC" />
+      <path d="M35 56L40 66L45 56H35Z" fill="#FFFFFF" />
+      {/* Face */}
+      <path d="M25 38C25 28 32 23 40 23C48 23 55 28 55 38C55 48 48 53 40 53C32 53 25 48 25 38Z" fill="#FAD1C0" />
+      {/* Hair front */}
+      <path d="M23 34C23 23 31 15 40 15C49 15 57 23 57 34C54 26 47 22 40 22C33 22 26 26 23 34Z" fill="#E24D28" />
+      <path d="M24 30C28 22 35 18 40 23C45 18 52 22 56 30C52 23 45 19 40 21C35 19 28 23 24 30Z" fill="#C93B18" />
+      {/* Eyes */}
+      <circle cx="34" cy="38" r="2" fill="#3A2521" />
+      <circle cx="46" cy="38" r="2" fill="#3A2521" />
+      {/* Cheeks */}
+      <circle cx="31" cy="42" r="2.5" fill="#FFB0A0" opacity="0.6" />
+      <circle cx="49" cy="42" r="2.5" fill="#FFB0A0" opacity="0.6" />
+      {/* Mouth */}
+      <path d="M37 44C38.5 45.5 41.5 45.5 43 44" stroke="#C95B53" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
 }
 
 export function Sidebar() {
   const [location] = useLocation();
   const { data: profile } = useGetClientProfile();
   const [showLogout, setShowLogout] = useState(false);
+
+  const displayName = profile?.name || 'Alex Morgan';
 
   return (
     <>
@@ -102,47 +132,34 @@ export function Sidebar() {
         </nav>
 
         {/* Bottom */}
-        <div className="px-3 pb-4 border-t border-sidebar-border pt-3 space-y-1">
-          {/* My Profile link */}
-          <Link href="/profile" className="block">
-            <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors cursor-pointer text-[13px] font-medium">
-              <User className="w-4 h-4 shrink-0" strokeWidth={2} />
-              <span>My Profile</span>
+        <div className="px-3 pb-4 border-t border-sidebar-border pt-3 space-y-2">
+          {/* User profile card acting as Profile button */}
+          <Link href="/profile" className="block group">
+            <div className="p-3 rounded-2xl bg-[#F5F6F9] dark:bg-muted/50 border border-slate-200/50 dark:border-border/40 shadow-xs hover:border-primary/30 transition-all cursor-pointer">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 bg-slate-100 flex items-center justify-center group-hover:ring-2 group-hover:ring-primary/20 transition-all">
+                  {profile?.avatarUrl ? (
+                    <img src={profile.avatarUrl} alt={displayName} className="w-full h-full object-cover" />
+                  ) : (
+                    <RedHairAvatar className="w-full h-full" />
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-[13px] font-bold text-slate-800 dark:text-foreground truncate leading-tight group-hover:text-primary transition-colors">
+                    {displayName}
+                  </h4>
+                  <p className="text-[11px] text-slate-400 dark:text-muted-foreground truncate leading-tight mt-0.5 font-normal">
+                    Client
+                  </p>
+                </div>
+              </div>
             </div>
           </Link>
-
-          {/* User card */}
-          {profile && (
-            <div className="px-3 py-2.5 rounded-lg bg-muted/60 mt-1">
-              <div className="flex items-center gap-2.5 mb-2">
-                {profile.avatarUrl ? (
-                  <img src={profile.avatarUrl} alt={profile.name} className="w-8 h-8 rounded-full object-cover shrink-0" />
-                ) : (
-                  <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0">
-                    {initials(profile.name)}
-                  </div>
-                )}
-                <div className="min-w-0">
-                  <p className="text-[12px] font-semibold text-foreground truncate leading-tight">{profile.name}</p>
-                  <p className="text-[10px] text-muted-foreground truncate leading-tight mt-0.5">Client</p>
-                </div>
-              </div>
-
-              {/* Available toggle row */}
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] text-muted-foreground font-medium">Available</span>
-                {/* Simple toggle pill */}
-                <div className="w-8 h-4 rounded-full bg-primary flex items-center justify-end pr-0.5 cursor-pointer">
-                  <div className="w-3 h-3 rounded-full bg-white shadow-sm" />
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Sign out */}
           <button
             onClick={() => setShowLogout(true)}
-            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg transition-all duration-150 text-muted-foreground hover:bg-red-50 hover:text-destructive text-[13px] font-medium cursor-pointer"
+            className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg transition-all duration-150 text-muted-foreground hover:bg-red-50 hover:text-destructive text-[13px] font-medium cursor-pointer"
           >
             <LogOut className="w-4 h-4 shrink-0" strokeWidth={2} />
             <span>Sign out</span>
@@ -239,17 +256,13 @@ export function TopNav() {
         </button>
 
         {/* User avatar */}
-        {profile && (
-          <Link href="/profile" className="block ml-1">
-            {profile.avatarUrl ? (
-              <img src={profile.avatarUrl} alt={profile.name} className="w-8 h-8 rounded-full object-cover" />
-            ) : (
-              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">
-                {initials(profile.name)}
-              </div>
-            )}
-          </Link>
-        )}
+        <Link href="/profile" className="block ml-1">
+          {profile?.avatarUrl ? (
+            <img src={profile.avatarUrl} alt={profile.name} className="w-8 h-8 rounded-full object-cover" />
+          ) : (
+            <RedHairAvatar className="w-8 h-8 rounded-full" />
+          )}
+        </Link>
       </div>
     </header>
   );

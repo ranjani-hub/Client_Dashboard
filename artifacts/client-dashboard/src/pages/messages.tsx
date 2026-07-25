@@ -24,7 +24,7 @@ export default function MessagesPage() {
       id: 2,
       type: "text",
       senderId: 1,
-      senderName: "Alex Rivera",
+      senderName: "Alex Morgan",
       senderAvatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
       content: "Hi Dr. Jenkins, I've been doing the breathing exercises whenever I notice tension. It really helped before my presentation yesterday!",
       sentAt: new Date(Date.now() - 86400000 * 2 + 3600000).toISOString(),
