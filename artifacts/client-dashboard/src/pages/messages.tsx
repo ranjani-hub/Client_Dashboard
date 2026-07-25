@@ -42,7 +42,7 @@ export default function MessagesPage() {
     }
   ];
 
-  const messages = apiMessages || mockMessages;
+  const messages = (Array.isArray(apiMessages) && apiMessages.length > 0) ? apiMessages : mockMessages;
   const sendMutation = useSendMessage();
   const queryClient = useQueryClient();
   const [newMessage, setNewMessage] = useState('');

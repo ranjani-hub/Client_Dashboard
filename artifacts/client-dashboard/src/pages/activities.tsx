@@ -74,7 +74,7 @@ export default function ActivitiesPage() {
     }
   ];
 
-  const activities = apiActivities || mockActivities;
+  const activities = (Array.isArray(apiActivities) && apiActivities.length > 0) ? apiActivities : mockActivities;
   const completeMutation = useCompleteActivity();
   const queryClient = useQueryClient();
   const [activeActivityId, setActiveActivityId] = useState<number | null>(null);

@@ -50,7 +50,7 @@ export default function AssessmentsPage() {
     }
   ];
 
-  const assessments = apiAssessments || mockAssessments;
+  const assessments = (Array.isArray(apiAssessments) && apiAssessments.length > 0) ? apiAssessments : mockAssessments;
   const submitMutation = useSubmitAssessment();
   const queryClient = useQueryClient();
   const [activeAssessmentId, setActiveAssessmentId] = useState<number | null>(null);

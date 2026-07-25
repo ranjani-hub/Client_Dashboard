@@ -22,7 +22,7 @@ export default function TherapistPage() {
     email: "dr.jenkins@hexpertify.com"
   };
 
-  const therapist = apiTherapist || mockTherapist;
+  const therapist = (apiTherapist && typeof apiTherapist === 'object' && 'name' in apiTherapist && (apiTherapist as any).name) ? apiTherapist : mockTherapist;
 
   if (isLoading) {
     return (

@@ -120,8 +120,6 @@ export default function Dashboard() {
     ]
   };
 
-  const data = apiData || mockDashboardData;
-
   const today = new Date();
   const dayLabel = format(today, 'EEEE, MMMM d');
   const weekNum = getWeekNumber(today);
@@ -141,12 +139,17 @@ export default function Dashboard() {
     );
   }
 
-  if (!data) return null;
+  const isRealData = apiData && typeof apiData === 'object' && Array.isArray((apiData as any).todayTasks);
+  const data = isRealData ? apiData : mockDashboardData;
 
-  const {
-    clientName, activitiesCompleted, currentStreak,
-    goalsAchieved, upcomingSession, todayTasks, recentMessage, sharedResources,
-  } = data;
+  const clientName = data?.clientName || mockDashboardData.clientName;
+  const activitiesCompleted = data?.activitiesCompleted ?? mockDashboardData.activitiesCompleted;
+  const currentStreak = data?.currentStreak ?? mockDashboardData.currentStreak;
+  const goalsAchieved = data?.goalsAchieved ?? mockDashboardData.goalsAchieved;
+  const upcomingSession = data?.upcomingSession || mockDashboardData.upcomingSession;
+  const todayTasks = Array.isArray(data?.todayTasks) ? data.todayTasks : mockDashboardData.todayTasks;
+  const recentMessage = data?.recentMessage || mockDashboardData.recentMessage;
+  const sharedResources = Array.isArray(data?.sharedResources) ? data.sharedResources : mockDashboardData.sharedResources;
 
   const stats = [
     {

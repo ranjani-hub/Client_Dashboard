@@ -49,7 +49,7 @@ export default function SessionsPage() {
     }
   ];
 
-  const sessions = apiSessions || (activeTab === 'upcoming' ? mockUpcomingSessions : activeTab === 'past' ? mockPastSessions : []);
+  const sessions = (Array.isArray(apiSessions) && apiSessions.length > 0) ? apiSessions : (activeTab === 'upcoming' ? mockUpcomingSessions : activeTab === 'past' ? mockPastSessions : []);
 
   const handleCancel = (id: number) => {
     if (confirm('Are you sure you want to cancel this session?')) {

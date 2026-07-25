@@ -60,7 +60,7 @@ export default function ResourcesPage() {
     }
   ];
 
-  const resources = apiResources || mockResources;
+  const resources = (Array.isArray(apiResources) && apiResources.length > 0) ? apiResources : mockResources;
   const toggleSaveMutation = useToggleSaveResource();
   const queryClient = useQueryClient();
 
