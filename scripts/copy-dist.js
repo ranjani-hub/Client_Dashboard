@@ -11,10 +11,12 @@ if (fs.existsSync(src)) {
   ];
 
   for (const target of targets) {
-    fs.mkdirSync(target, { recursive: true });
-    fs.cpSync(src, target, { recursive: true, force: true });
+    if (target !== src) {
+      fs.mkdirSync(target, { recursive: true });
+      fs.cpSync(src, target, { recursive: true, force: true });
+    }
   }
-  console.log('Successfully copied dist assets to all target build folders.');
+  console.log('Successfully copied dist assets to target build folders.');
 } else {
   console.error('Build directory dist does not exist.');
 }
