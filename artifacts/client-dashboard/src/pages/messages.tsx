@@ -1,13 +1,48 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useGetMessages, useSendMessage, getGetMessagesQueryKey } from '@workspace/api-client-react';
-import { pageTransition } from '@/components/shared';
+import { pageTransition, safeFormatDate } from '@/components/shared';
 import { Send, Phone, Video, Search, User } from 'lucide-react';
 import { format, isSameDay, formatRelative } from 'date-fns';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function MessagesPage() {
-  const { data: messages, isLoading } = useGetMessages();
+  const { data: apiMessages, isLoading } = useGetMessages();
+
+  const mockMessages = [
+    {
+      id: 1,
+      type: "text",
+      senderId: 2,
+      senderName: "Dr. Sarah Jenkins",
+      senderAvatarUrl: "https://images.unsplash.com/photo-1594824813566-78a9c3756b57?w=150&auto=format&fit=crop&q=80",
+      content: "Hi Alex! How are you feeling after our last session on Tuesday?",
+      sentAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+      isRead: true
+    },
+    {
+      id: 2,
+      type: "text",
+      senderId: 1,
+      senderName: "Alex Rivera",
+      senderAvatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      content: "Hi Dr. Jenkins, I've been doing the breathing exercises whenever I notice tension. It really helped before my presentation yesterday!",
+      sentAt: new Date(Date.now() - 86400000 * 2 + 3600000).toISOString(),
+      isRead: true
+    },
+    {
+      id: 3,
+      type: "text",
+      senderId: 2,
+      senderName: "Dr. Sarah Jenkins",
+      senderAvatarUrl: "https://images.unsplash.com/photo-1594824813566-78a9c3756b57?w=150&auto=format&fit=crop&q=80",
+      content: "That's fantastic news! Great work applying the techniques in real-world scenarios. We'll build on that success in our upcoming session.",
+      sentAt: new Date(Date.now() - 86400000 + 7200000).toISOString(),
+      isRead: false
+    }
+  ];
+
+  const messages = apiMessages || mockMessages;
   const sendMutation = useSendMessage();
   const queryClient = useQueryClient();
   const [newMessage, setNewMessage] = useState('');
@@ -144,7 +179,7 @@ export default function MessagesPage() {
                         }`}>
                           <p className="text-sm leading-relaxed">{msg.content}</p>
                           <p className={`text-[10px] mt-2 font-medium ${isMe ? 'text-primary-foreground/70 text-right' : 'text-muted-foreground'}`}>
-                            {format(new Date(msg.sentAt), 'h:mm a')}
+                            {safeFormatDate(msg.sentAt, 'h:mm a')}
                           </p>
                         </div>
                       </div>

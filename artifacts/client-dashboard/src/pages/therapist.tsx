@@ -6,8 +6,23 @@ import { ShieldCheck, GraduationCap, Globe, HeartPulse, X, Mail, Video } from 'l
 import { Link } from 'wouter';
 
 export default function TherapistPage() {
-  const { data: therapist, isLoading } = useGetTherapist();
+  const { data: apiTherapist, isLoading } = useGetTherapist();
   const [showFullProfile, setShowFullProfile] = useState(false);
+
+  const mockTherapist = {
+    id: 1,
+    name: "Dr. Sarah Jenkins",
+    title: "Licensed Clinical Psychologist (Ph.D., Psy.D.)",
+    avatarUrl: "https://images.unsplash.com/photo-1594824813566-78a9c3756b57?w=300&auto=format&fit=crop&q=80",
+    bio: "Dr. Sarah Jenkins specializes in Cognitive Behavioral Therapy (CBT), Mindfulness-Based Stress Reduction (MBSR), and trauma-informed care. With over 12 years of experience helping individuals navigate anxiety, depression, and life transitions, Dr. Jenkins works collaboratively with clients to build resilience and long-term coping strategies.",
+    specializations: ["Cognitive Behavioral Therapy (CBT)", "Mindfulness & Stress Reduction", "Anxiety & Panic Disorders", "Depression & Mood Management"],
+    languages: ["English", "Spanish"],
+    yearsOfExperience: 12,
+    isVerified: true,
+    email: "dr.jenkins@hexpertify.com"
+  };
+
+  const therapist = apiTherapist || mockTherapist;
 
   if (isLoading) {
     return (
@@ -17,8 +32,6 @@ export default function TherapistPage() {
       </div>
     );
   }
-
-  if (!therapist) return null;
 
   return (
     <motion.div {...pageTransition} className="max-w-4xl mx-auto space-y-8 pb-12">

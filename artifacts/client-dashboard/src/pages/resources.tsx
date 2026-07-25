@@ -19,7 +19,48 @@ export default function ResourcesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   
   const queryParams = activeCategory !== 'all' ? { category: activeCategory as GetResourcesCategory } : undefined;
-  const { data: resources, isLoading } = useGetResources(queryParams);
+  const { data: apiResources, isLoading } = useGetResources(queryParams);
+
+  const mockResources = [
+    {
+      id: 1,
+      title: "Understanding Panic & Somatic Grounding Techniques",
+      category: "article",
+      description: "Practical step-by-step physical grounding tools to de-escalate panic attacks and physical hyperarousal.",
+      thumbnailUrl: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&auto=format&fit=crop&q=80",
+      readingMinutes: 5,
+      author: "Dr. Sarah Jenkins",
+      isSaved: true,
+      isSharedByTherapist: true,
+      downloadUrl: "#"
+    },
+    {
+      id: 2,
+      title: "Cognitive Distortions Reference Guide & Worksheet",
+      category: "worksheet",
+      description: "Identify and reframe the 10 most common unhelpful thinking habits with real-life examples.",
+      thumbnailUrl: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=500&auto=format&fit=crop&q=80",
+      readingMinutes: 8,
+      author: "Hexpertify Clinical Team",
+      isSaved: false,
+      isSharedByTherapist: true,
+      downloadUrl: "#"
+    },
+    {
+      id: 3,
+      title: "15-Minute Progressive Muscle Relaxation (PMR)",
+      category: "meditation",
+      description: "Guided audio session systematically tensing and relaxing major muscle groups to release somatic tension.",
+      thumbnailUrl: "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=500&auto=format&fit=crop&q=80",
+      readingMinutes: 15,
+      author: "Dr. Sarah Jenkins",
+      isSaved: true,
+      isSharedByTherapist: false,
+      downloadUrl: "#"
+    }
+  ];
+
+  const resources = apiResources || mockResources;
   const toggleSaveMutation = useToggleSaveResource();
   const queryClient = useQueryClient();
 

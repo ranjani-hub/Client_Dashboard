@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGetActivities, useCompleteActivity, getGetActivitiesQueryKey } from '@workspace/api-client-react';
-import { pageTransition, staggerContainer, staggerItem, PageHeader } from '@/components/shared';
+import { pageTransition, staggerContainer, staggerItem, PageHeader, safeFormatDate } from '@/components/shared';
 import { Activity as ActivityIcon, CheckCircle2, Clock, Calendar, Wind, BookOpen, Brain, Moon, Heart, Sparkles, Send, X } from 'lucide-react';
 import { format } from 'date-fns';
 import { useQueryClient } from '@tanstack/react-query';
@@ -17,7 +17,64 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
 };
 
 export default function ActivitiesPage() {
-  const { data: activities, isLoading } = useGetActivities();
+  const { data: apiActivities, isLoading } = useGetActivities();
+
+  const mockActivities = [
+    {
+      id: 1,
+      title: "Morning Mindfulness Meditation",
+      category: "mindfulness",
+      description: "10-minute guided breathing session focusing on awareness of breath and physical sensation grounding.",
+      dueDate: "Today",
+      estimatedMinutes: 10,
+      completionPercent: 0,
+      difficulty: "Easy",
+      status: "pending",
+      reflection: null,
+      completedAt: null
+    },
+    {
+      id: 2,
+      title: "CBT Thought Record Entry",
+      category: "cbt",
+      description: "Document recent anxiety trigger and write a balanced, rational reframe using the 5-column technique.",
+      dueDate: "Today",
+      estimatedMinutes: 15,
+      completionPercent: 50,
+      difficulty: "Medium",
+      status: "pending",
+      reflection: null,
+      completedAt: null
+    },
+    {
+      id: 3,
+      title: "Evening Gratitude Journaling",
+      category: "gratitude",
+      description: "Write down 3 things you felt grateful for today and reflect on why they mattered.",
+      dueDate: "Today",
+      estimatedMinutes: 8,
+      completionPercent: 0,
+      difficulty: "Easy",
+      status: "pending",
+      reflection: null,
+      completedAt: null
+    },
+    {
+      id: 4,
+      title: "Diaphragmatic Breathing Exercise",
+      category: "breathing",
+      description: "Practice box breathing (4s in, 4s hold, 4s out, 4s hold) for 5 cycles.",
+      dueDate: "Tomorrow",
+      estimatedMinutes: 5,
+      completionPercent: 100,
+      difficulty: "Easy",
+      status: "completed",
+      reflection: "Felt significantly calmer afterwards.",
+      completedAt: new Date().toISOString()
+    }
+  ];
+
+  const activities = apiActivities || mockActivities;
   const completeMutation = useCompleteActivity();
   const queryClient = useQueryClient();
   const [activeActivityId, setActiveActivityId] = useState<number | null>(null);
@@ -91,7 +148,7 @@ export default function ActivitiesPage() {
                       <Clock className="w-4 h-4" /> {activity.estimatedMinutes} min
                     </span>
                     <span className="flex items-center gap-1.5 bg-muted/50 px-3 py-1.5 rounded-lg">
-                      <Calendar className="w-4 h-4" /> Due {format(new Date(activity.dueDate), 'MMM d')}
+                      <Calendar className="w-4 h-4" /> Due {safeFormatDate(activity.dueDate, 'MMM d')}
                     </span>
                   </div>
 
@@ -156,7 +213,7 @@ export default function ActivitiesPage() {
                 </div>
                 {activity.completedAt && (
                   <p className="text-xs font-medium text-muted-foreground mb-3">
-                    Completed on {format(new Date(activity.completedAt), 'MMM d, yyyy')}
+                    Completed on {safeFormatDate(activity.completedAt, 'MMM d, yyyy')}
                   </p>
                 )}
                 {activity.reflection && (

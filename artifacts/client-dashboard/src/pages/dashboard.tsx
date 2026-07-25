@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useGetDashboard } from '@workspace/api-client-react';
-import { pageTransition } from '@/components/shared';
+import { pageTransition, safeFormatDate } from '@/components/shared';
 import {
   Video, Users, FileText, Clock, Calendar, CheckCircle2,
   PlayCircle, Activity as ActivityIcon, BookOpen, ExternalLink,
@@ -23,8 +23,104 @@ function initials(name: string) {
 }
 
 export default function Dashboard() {
-  const { data, isLoading } = useGetDashboard();
+  const { data: apiData, isLoading } = useGetDashboard();
   const [scheduleTab, setScheduleTab] = useState<'today' | 'week' | 'month'>('today');
+
+  const mockDashboardData = {
+    clientName: "Alex Rivera",
+    activitiesCompleted: 14,
+    currentStreak: 7,
+    goalsAchieved: 5,
+    upcomingSession: {
+      id: 1,
+      scheduledAt: new Date(Date.now() + 86400000 * 2).toISOString(),
+      durationMinutes: 50,
+      therapistName: "Dr. Sarah Jenkins",
+      therapistAvatarUrl: "https://images.unsplash.com/photo-1594824813566-78a9c3756b57?w=150&auto=format&fit=crop&q=80",
+      joinUrl: "https://meet.google.com",
+      notes: null,
+      status: "upcoming"
+    },
+    todayTasks: [
+      {
+        id: 1,
+        title: "Morning Mindfulness Meditation",
+        category: "Mindfulness",
+        description: "10-minute guided breathing session",
+        dueDate: "Today",
+        estimatedMinutes: 10,
+        completionPercent: 0,
+        difficulty: "Easy",
+        status: "pending",
+        reflection: null,
+        completedAt: null
+      },
+      {
+        id: 2,
+        title: "CBT Thought Record Entry",
+        category: "Cognitive Behavioral",
+        description: "Document recent anxiety trigger and cognitive reframing",
+        dueDate: "Today",
+        estimatedMinutes: 15,
+        completionPercent: 50,
+        difficulty: "Medium",
+        status: "pending",
+        reflection: null,
+        completedAt: null
+      },
+      {
+        id: 3,
+        title: "Evening Gratitude Journaling",
+        category: "Reflection",
+        description: "Write down 3 things you felt grateful for today",
+        dueDate: "Today",
+        estimatedMinutes: 8,
+        completionPercent: 0,
+        difficulty: "Easy",
+        status: "pending",
+        reflection: null,
+        completedAt: null
+      }
+    ],
+    recentMessage: {
+      id: 1,
+      type: "text",
+      senderId: 2,
+      senderName: "Dr. Sarah Jenkins",
+      senderAvatarUrl: "https://images.unsplash.com/photo-1594824813566-78a9c3756b57?w=150&auto=format&fit=crop&q=80",
+      content: "Great progress on your thought records this week, Alex! Looking forward to discussing your insights in our session on Thursday.",
+      sentAt: new Date(Date.now() - 3600000 * 3).toISOString(),
+      isRead: false
+    },
+    sharedResources: [
+      {
+        id: 1,
+        title: "Understanding Panic & Somatic Grounding Techniques",
+        category: "Guide",
+        description: "Practical steps to de-escalate acute anxiety symptoms",
+        thumbnailUrl: "",
+        readingMinutes: 5,
+        author: "Dr. Sarah Jenkins",
+        isSaved: true,
+        isSharedByTherapist: true,
+        downloadUrl: "#"
+      },
+      {
+        id: 2,
+        title: "Cognitive Distortions Reference Sheet",
+        category: "Worksheet",
+        description: "Identify and label 10 common unhelpful thinking patterns",
+        thumbnailUrl: "",
+        readingMinutes: 7,
+        author: "Hexpertify Clinical Team",
+        isSaved: false,
+        isSharedByTherapist: true,
+        downloadUrl: "#"
+      }
+    ]
+  };
+
+  const data = apiData || mockDashboardData;
 
   const today = new Date();
   const dayLabel = format(today, 'EEEE, MMMM d');
@@ -144,7 +240,7 @@ export default function Dashboard() {
                 </span>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/25 text-emerald-300 text-[11px] font-medium">
                   <Clock className="w-3 h-3" />
-                  {format(new Date(upcomingSession.scheduledAt), 'MMM d')}
+                  {safeFormatDate(upcomingSession.scheduledAt, 'MMM d')}
                 </span>
               </div>
 
@@ -174,10 +270,10 @@ export default function Dashboard() {
               {/* Time row */}
               <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/8 border border-white/8">
                 <span className="text-sm font-bold text-white">
-                  {format(new Date(upcomingSession.scheduledAt), 'h:mm a')}
+                  {safeFormatDate(upcomingSession.scheduledAt, 'h:mm a')}
                 </span>
                 <span className="text-xs text-white/45">
-                  {format(new Date(upcomingSession.scheduledAt), 'MMMM d')}
+                  {safeFormatDate(upcomingSession.scheduledAt, 'MMMM d')}
                 </span>
               </div>
 

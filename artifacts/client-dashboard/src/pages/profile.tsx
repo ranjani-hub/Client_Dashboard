@@ -6,8 +6,19 @@ import { Camera, User, Mail, Phone, Globe, CalendarHeart, Loader2 } from 'lucide
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 
+const MOCK_PROFILE = {
+  name: 'Alex Rivera',
+  email: 'alex.rivera@example.com',
+  phone: '+1 (555) 234-5678',
+  age: 29,
+  gender: 'Non-binary',
+  preferredLanguage: 'English',
+  avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80'
+};
+
 export default function ProfilePage() {
-  const { data: profile, isLoading } = useGetClientProfile();
+  const { data: apiProfile, isLoading } = useGetClientProfile();
+  const profile = apiProfile || MOCK_PROFILE;
   const updateMutation = useUpdateClientProfile();
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -24,12 +35,12 @@ export default function ProfilePage() {
   useEffect(() => {
     if (profile) {
       setFormData({
-        name: profile.name || '',
-        email: profile.email || '',
-        phone: profile.phone || '',
-        age: profile.age?.toString() || '',
-        gender: profile.gender || '',
-        preferredLanguage: profile.preferredLanguage || ''
+        name: profile.name || 'Alex Rivera',
+        email: profile.email || 'alex.rivera@example.com',
+        phone: profile.phone || '+1 (555) 234-5678',
+        age: profile.age ? String(profile.age) : '29',
+        gender: profile.gender || 'Non-binary',
+        preferredLanguage: profile.preferredLanguage || 'English'
       });
     }
   }, [profile]);

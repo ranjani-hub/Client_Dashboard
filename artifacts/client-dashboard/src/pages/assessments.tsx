@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGetAssessments, useSubmitAssessment, getGetAssessmentsQueryKey } from '@workspace/api-client-react';
-import { pageTransition, staggerContainer, staggerItem, PageHeader } from '@/components/shared';
+import { pageTransition, staggerContainer, staggerItem, PageHeader, safeFormatDate } from '@/components/shared';
 import { ClipboardList, Clock, Calendar, CheckCircle2, TrendingUp, X } from 'lucide-react';
 import { format } from 'date-fns';
 import { useQueryClient } from '@tanstack/react-query';
@@ -9,14 +9,55 @@ import { LineChart, Line, ResponsiveContainer, YAxis } from 'recharts';
 
 export default function AssessmentsPage() {
   const [activeTab, setActiveTab] = useState<'pending' | 'completed'>('pending');
-  const { data: assessments, isLoading } = useGetAssessments();
+  const { data: apiAssessments, isLoading } = useGetAssessments();
+
+  const mockAssessments = [
+    {
+      id: 1,
+      name: "GAD-7 Anxiety Scale Questionnaire",
+      description: "Standardized 7-item scale assessing severity of generalized anxiety symptoms over the past 2 weeks.",
+      type: "Anxiety",
+      dueDate: "This Week",
+      estimatedMinutes: 5,
+      status: "pending",
+      completedAt: null,
+      score: null,
+      maxScore: 21,
+      severityLabel: null,
+      scoreHistory: [
+        { date: "May 1", score: 14 },
+        { date: "May 15", score: 11 },
+        { date: "Jun 1", score: 8 }
+      ]
+    },
+    {
+      id: 2,
+      name: "PHQ-9 Depression Screener",
+      description: "9-question depression module to monitor symptom progress and therapeutic outcomes.",
+      type: "Depression",
+      dueDate: "Completed",
+      estimatedMinutes: 6,
+      status: "completed",
+      completedAt: new Date(Date.now() - 86400000 * 4).toISOString(),
+      score: 5,
+      maxScore: 27,
+      severityLabel: "Mild",
+      scoreHistory: [
+        { date: "May 1", score: 12 },
+        { date: "May 15", score: 9 },
+        { date: "Jun 1", score: 5 }
+      ]
+    }
+  ];
+
+  const assessments = apiAssessments || mockAssessments;
   const submitMutation = useSubmitAssessment();
   const queryClient = useQueryClient();
   const [activeAssessmentId, setActiveAssessmentId] = useState<number | null>(null);
   const [score, setScore] = useState<string>('');
 
-  const pending = assessments?.filter(a => a.status === 'pending') || [];
-  const completed = assessments?.filter(a => a.status === 'completed') || [];
+  const pending = assessments.filter(a => a.status === 'pending');
+  const completed = assessments.filter(a => a.status === 'completed');
 
   const handleSubmit = (id: number) => {
     const numScore = parseInt(score, 10);
@@ -102,7 +143,7 @@ export default function AssessmentsPage() {
                           </span>
                           {assessment.dueDate && (
                             <span className="flex items-center gap-1.5">
-                              <Calendar className="w-4 h-4" /> Due {format(new Date(assessment.dueDate), 'MMM d')}
+                              <Calendar className="w-4 h-4" /> Due {safeFormatDate(assessment.dueDate, 'MMM d')}
                             </span>
                           )}
                         </div>
@@ -158,7 +199,7 @@ export default function AssessmentsPage() {
                       </h3>
                       {assessment.completedAt && (
                         <p className="text-sm text-muted-foreground mt-1">
-                          Completed {format(new Date(assessment.completedAt), 'MMM d, yyyy')}
+                          Completed {safeFormatDate(assessment.completedAt, 'MMM d, yyyy')}
                         </p>
                       )}
                     </div>

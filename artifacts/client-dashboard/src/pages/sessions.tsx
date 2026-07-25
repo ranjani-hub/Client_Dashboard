@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useGetSessions, useCancelSession } from '@workspace/api-client-react';
-import { pageTransition, staggerContainer, staggerItem, PageHeader } from '@/components/shared';
+import { pageTransition, staggerContainer, staggerItem, PageHeader, safeFormatDate } from '@/components/shared';
 import { Calendar, Clock, Video, XCircle, RefreshCw, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useQueryClient } from '@tanstack/react-query';
@@ -9,9 +9,47 @@ import { getGetSessionsQueryKey } from '@workspace/api-client-react';
 
 export default function SessionsPage() {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past' | 'cancelled'>('upcoming');
-  const { data: sessions, isLoading } = useGetSessions({ status: activeTab });
+  const { data: apiSessions, isLoading } = useGetSessions({ status: activeTab });
   const cancelMutation = useCancelSession();
   const queryClient = useQueryClient();
+
+  const mockUpcomingSessions = [
+    {
+      id: 1,
+      scheduledAt: new Date(Date.now() + 86400000 * 2).toISOString(),
+      durationMinutes: 50,
+      therapistName: "Dr. Sarah Jenkins",
+      therapistAvatarUrl: "https://images.unsplash.com/photo-1594824813566-78a9c3756b57?w=150&auto=format&fit=crop&q=80",
+      joinUrl: "https://meet.google.com",
+      notes: "Focus on thought record reframing and sleep hygiene strategies.",
+      status: "upcoming"
+    },
+    {
+      id: 2,
+      scheduledAt: new Date(Date.now() + 86400000 * 9).toISOString(),
+      durationMinutes: 50,
+      therapistName: "Dr. Sarah Jenkins",
+      therapistAvatarUrl: "https://images.unsplash.com/photo-1594824813566-78a9c3756b57?w=150&auto=format&fit=crop&q=80",
+      joinUrl: "https://meet.google.com",
+      notes: "Review progress on weekly mindfulness exercises.",
+      status: "upcoming"
+    }
+  ];
+
+  const mockPastSessions = [
+    {
+      id: 3,
+      scheduledAt: new Date(Date.now() - 86400000 * 5).toISOString(),
+      durationMinutes: 50,
+      therapistName: "Dr. Sarah Jenkins",
+      therapistAvatarUrl: "https://images.unsplash.com/photo-1594824813566-78a9c3756b57?w=150&auto=format&fit=crop&q=80",
+      joinUrl: "",
+      notes: "Discussed social anxiety triggers and practiced diaphragmatic breathing.",
+      status: "past"
+    }
+  ];
+
+  const sessions = apiSessions || (activeTab === 'upcoming' ? mockUpcomingSessions : activeTab === 'past' ? mockPastSessions : []);
 
   const handleCancel = (id: number) => {
     if (confirm('Are you sure you want to cancel this session?')) {
@@ -70,13 +108,13 @@ export default function SessionsPage() {
               {/* Date Block */}
               <div className="w-full sm:w-32 shrink-0 bg-accent rounded-2xl p-4 flex flex-col items-center justify-center text-center">
                 <span className="text-primary font-bold uppercase tracking-wider text-sm">
-                  {format(new Date(session.scheduledAt), 'MMM')}
+                  {safeFormatDate(session.scheduledAt, 'MMM')}
                 </span>
                 <span className="text-4xl font-black text-primary my-1">
-                  {format(new Date(session.scheduledAt), 'd')}
+                  {safeFormatDate(session.scheduledAt, 'd')}
                 </span>
                 <span className="text-primary/70 font-medium text-sm">
-                  {format(new Date(session.scheduledAt), 'EEEE')}
+                  {safeFormatDate(session.scheduledAt, 'EEEE')}
                 </span>
               </div>
 
@@ -88,7 +126,7 @@ export default function SessionsPage() {
                     <div className="flex items-center gap-4 text-muted-foreground text-sm font-medium">
                       <span className="flex items-center gap-1.5">
                         <Clock className="w-4 h-4" />
-                        {format(new Date(session.scheduledAt), 'h:mm a')}
+                        {safeFormatDate(session.scheduledAt, 'h:mm a')}
                       </span>
                       <span className="flex items-center gap-1.5">
                         <Calendar className="w-4 h-4" />
