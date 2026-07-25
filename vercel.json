@@ -3,7 +3,7 @@
   "version": 2,
   "framework": "vite",
   "buildCommand": "pnpm --filter @workspace/client-dashboard run build",
-  "outputDirectory": "artifacts/client-dashboard/dist",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/(.*)",
