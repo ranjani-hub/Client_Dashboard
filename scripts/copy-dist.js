@@ -1,11 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const src = path.resolve(process.cwd(), 'dist');
+const src = path.resolve(process.cwd(), 'build');
 
 if (fs.existsSync(src)) {
   const targets = [
+    path.resolve(process.cwd(), 'dist'),
     path.resolve(process.cwd(), 'public'),
+    path.resolve(process.cwd(), '../../build'),
     path.resolve(process.cwd(), '../../dist'),
     path.resolve(process.cwd(), '../../public'),
   ];
@@ -16,7 +18,7 @@ if (fs.existsSync(src)) {
       fs.cpSync(src, target, { recursive: true, force: true });
     }
   }
-  console.log('Successfully copied dist assets to target build folders.');
+  console.log('Successfully copied build assets to all target build folders.');
 } else {
-  console.error('Build directory dist does not exist.');
+  console.error('Build directory build does not exist.');
 }
