@@ -235,22 +235,19 @@ export function TopNav() {
       {/* Right actions */}
       <div className="flex items-center gap-1.5">
         {/* Icon buttons */}
-        <button className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+        <Link href="/sessions" className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground transition-colors" title="Sessions">
           <Calendar className="w-4 h-4" />
-        </button>
-        <button className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
-          <Flag className="w-4 h-4" />
-        </button>
-        <button className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground transition-colors relative">
+        </Link>
+        <button className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground transition-colors relative" title="Notifications">
           <Bell className="w-4 h-4" />
           <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-primary ring-[1.5px] ring-card" />
         </button>
 
-        {/* Quick action button */}
-        <button className="hidden sm:inline-flex items-center gap-1.5 h-8 px-3.5 rounded-lg bg-primary text-white text-[13px] font-semibold hover:brightness-110 transition-all">
-          <Plus className="w-3.5 h-3.5" />
-          Quick action
-        </button>
+        {/* Message button */}
+        <Link href="/messages" className="hidden sm:inline-flex items-center gap-1.5 h-8 px-3.5 rounded-lg bg-primary text-white text-[13px] font-semibold hover:brightness-110 transition-all">
+          <MessageSquare className="w-3.5 h-3.5" />
+          Messages
+        </Link>
 
         {/* User avatar */}
         <Link href="/profile" className="block ml-1">
