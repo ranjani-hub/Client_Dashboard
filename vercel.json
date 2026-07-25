@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "buildCommand": "pnpm --filter @workspace/client-dashboard run build",
-  "outputDirectory": "artifacts/client-dashboard/dist",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/(.*)",
