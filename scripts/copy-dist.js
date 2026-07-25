@@ -76,6 +76,9 @@ export default function handler(req, res) {
     res.end('OK');
   }
 }
+
+export const app = handler;
+export const server = handler;
 `;
 
   const targets = [
