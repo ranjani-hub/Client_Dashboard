@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useGetClientProfile } from '@workspace/api-client-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ExpertifyLogo } from './logo';
 
 const NAV_SECTIONS = [
   {
@@ -90,14 +91,10 @@ export function Sidebar() {
     <>
       <aside className="fixed left-0 top-0 bottom-0 w-[220px] bg-sidebar border-r border-sidebar-border hidden md:flex flex-col z-40">
         {/* Logo */}
-        <div className="px-5 py-5 flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
-            <span className="text-white font-bold text-sm">H</span>
-          </div>
-          <div className="leading-tight">
-            <p className="text-foreground font-bold text-[14px] tracking-tight">Hexpertify</p>
-            <p className="text-muted-foreground text-[9px] font-semibold tracking-widest uppercase">Client Suite</p>
-          </div>
+        <div className="px-4 py-5 flex items-center">
+          <Link href="/dashboard" className="block">
+            <ExpertifyLogo className="h-8 w-auto" />
+          </Link>
         </div>
 
         {/* Nav sections */}
