@@ -91,19 +91,16 @@ export default function handler(req, res) {
     fs.mkdirSync(dir, { recursive: true });
     fs.mkdirSync(path.join(dir, 'src'), { recursive: true });
 
-    // Root level entrypoints
-    fs.writeFileSync(path.join(dir, 'index.js'), commonJsIndex);
-    fs.writeFileSync(path.join(dir, 'index.cjs'), commonJsIndex);
+    // ESM Entrypoints matching type: module
+    fs.writeFileSync(path.join(dir, 'index.js'), esmIndex);
     fs.writeFileSync(path.join(dir, 'index.mjs'), esmIndex);
-    fs.writeFileSync(path.join(dir, 'app.js'), commonJsIndex);
-    fs.writeFileSync(path.join(dir, 'server.js'), commonJsIndex);
+    fs.writeFileSync(path.join(dir, 'app.js'), esmIndex);
+    fs.writeFileSync(path.join(dir, 'server.js'), esmIndex);
 
-    // src/ level entrypoints
-    fs.writeFileSync(path.join(dir, 'src', 'index.js'), commonJsIndex);
-    fs.writeFileSync(path.join(dir, 'src', 'index.cjs'), commonJsIndex);
+    fs.writeFileSync(path.join(dir, 'src', 'index.js'), esmIndex);
     fs.writeFileSync(path.join(dir, 'src', 'index.mjs'), esmIndex);
-    fs.writeFileSync(path.join(dir, 'src', 'app.js'), commonJsIndex);
-    fs.writeFileSync(path.join(dir, 'src', 'server.js'), commonJsIndex);
+    fs.writeFileSync(path.join(dir, 'src', 'app.js'), esmIndex);
+    fs.writeFileSync(path.join(dir, 'src', 'server.js'), esmIndex);
   };
 
   for (const target of targets) {

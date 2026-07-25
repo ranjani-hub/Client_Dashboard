@@ -1,8 +1,12 @@
-// Static / Serverless Vercel entrypoint fallback (CommonJS)
-const fs = require('fs');
-const path = require('path');
+// Static / Serverless Vercel entrypoint fallback (ESM)
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-function handler(req, res) {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default function handler(req, res) {
   const possiblePaths = [
     path.join(__dirname, 'index.html'),
     path.join(__dirname, 'build', 'index.html'),
@@ -22,6 +26,3 @@ function handler(req, res) {
     res.end('OK');
   }
 }
-
-module.exports = handler;
-module.exports.default = handler;
