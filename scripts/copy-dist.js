@@ -93,6 +93,7 @@ export const server = handler;
   const writeEntrypoints = (dir) => {
     fs.mkdirSync(dir, { recursive: true });
     fs.mkdirSync(path.join(dir, 'src'), { recursive: true });
+    fs.mkdirSync(path.join(dir, 'api'), { recursive: true });
 
     // ESM Entrypoints matching type: module
     fs.writeFileSync(path.join(dir, 'index.js'), esmIndex);
@@ -104,7 +105,18 @@ export const server = handler;
     fs.writeFileSync(path.join(dir, 'src', 'index.mjs'), esmIndex);
     fs.writeFileSync(path.join(dir, 'src', 'app.js'), esmIndex);
     fs.writeFileSync(path.join(dir, 'src', 'server.js'), esmIndex);
+
+    fs.writeFileSync(path.join(dir, 'api', 'index.js'), esmIndex);
   };
+
+  const apiDirs = [
+    path.resolve(projectRoot, 'api'),
+    path.resolve(projectRoot, 'artifacts/client-dashboard/api'),
+  ];
+  for (const apiDir of apiDirs) {
+    fs.mkdirSync(apiDir, { recursive: true });
+    fs.writeFileSync(path.join(apiDir, 'index.js'), esmIndex);
+  }
 
   for (const target of targets) {
     fs.mkdirSync(target, { recursive: true });
