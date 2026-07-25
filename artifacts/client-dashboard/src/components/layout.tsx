@@ -91,9 +91,9 @@ export function Sidebar() {
     <>
       <aside className="fixed left-0 top-0 bottom-0 w-[220px] bg-sidebar border-r border-sidebar-border hidden md:flex flex-col z-40">
         {/* Logo */}
-        <div className="px-4 py-5 flex items-center">
-          <Link href="/dashboard" className="block">
-            <ExpertifyLogo className="h-8 w-auto" />
+        <div className="px-4 py-4 flex items-center">
+          <Link href="/dashboard" className="block w-full">
+            <ExpertifyLogo className="h-12 w-auto" />
           </Link>
         </div>
 
